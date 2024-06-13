@@ -1,0 +1,5 @@
+  . = __executable_start + OLD_DATA_REL_RO_ADDR;
+  .old_data.rel.ro :
+  {
+    TMP_DIR/data.rel.ro.o(.data.rel.ro)
+  }

@@ -1,0 +1,18 @@
+  . = __executable_start + OLD_RODATA_ADDR;
+  .old_rodata     :
+  {
+    TMP_DIR/rodata.o(.rodata)
+  }
+  /* Only keep *_array sections to enable old relocations to work
+     correctly. Those two sections should not be used in the new
+     binary. */
+  . = __executable_start + OLD_INIT_ADDR;
+  .old_init_array :
+  {
+    TMP_DIR/init_array.o(.init_array)
+  } 
+  . = __executable_start + OLD_FINI_ADDR;
+  .old_fini_array :
+  {
+    TMP_DIR/fini_array.o(.fini_array)
+  }
