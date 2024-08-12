@@ -431,7 +431,7 @@ static int build_ast_dfs(ast_stmt_list *list, cfg_node *node, ast_translation_un
         for(uint64_t i = (uint64_t) node->end_addr; i >= (uint64_t) node->start_addr; i -= 4) {
             insn = NULL;
             count = 0;
-            count = cs_disasm(handle, (void*) i, 4, i, 0, &insn);
+            count = cs_disasm(handle, &gcode[(uintptr_t)i], 4, i, 0, &insn);
 
             if(count != 0) {
                 cs_insn *in = &(insn[0]);
@@ -450,7 +450,7 @@ static int build_ast_dfs(ast_stmt_list *list, cfg_node *node, ast_translation_un
                     if(op2.ext != 0) {
                         break; // TODO: Add non implemented shifts
                     }
-                    count = cs_disasm(handle, node->end_addr, 4, (uint64_t) node->end_addr, 0, &insn);
+                    count = cs_disasm(handle, &gcode[(uintptr_t)node->end_addr], 4, (uint64_t) node->end_addr, 0, &insn);
                     cs_insn *in = &(insn[0]);
                     cs_detail *detail = in->detail;
                     if (insn[0].id == ARM64_INS_B) {
@@ -587,7 +587,7 @@ static int build_ast_dfs(ast_stmt_list *list, cfg_node *node, ast_translation_un
                     if(op2.ext != 0) {
                         break; // TODO: Add non implemented shifts
                     }
-                    count = cs_disasm(handle, node->end_addr, 4, (uint64_t) node->end_addr, 0, &insn);
+                    count = cs_disasm(handle, &gcode[(uintptr_t)node->end_addr], 4, (uint64_t) node->end_addr, 0, &insn);
                     cs_insn *in = &(insn[0]);
                     cs_detail *detail = in->detail;
                     if (insn[0].id == ARM64_INS_B) {
