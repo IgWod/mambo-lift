@@ -16,10 +16,10 @@ mkdir -p $TMP_DIR
 
 $LIFT_ROOT/bash/extract-sections.sh ${1}
 
-${CC} -o "${1}"_lifted "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} -O3 -g -Wl,-T /tmp/lifter/custom.ld
+${CC} -o "${1}"_lifted "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} -O3 -Wl,-T /tmp/lifter/custom.ld
 
 $LIFT_ROOT/bash/extract-sections.sh ${1} "${1}"_lifted --second-pass
 
-${CC} -o "${1}"_lifted "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} -O3 -g -Wl,-T /tmp/lifter/custom.ld
+${CC} -o "${1}"_lifted "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} -O3 -Wl,-T /tmp/lifter/custom.ld
 
 rm -r $TMP_DIR
