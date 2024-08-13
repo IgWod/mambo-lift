@@ -3,6 +3,39 @@
 # Copyright 2024 Igor Wodiany
 # Licensed under the Apache License, Version 2.0 (the "License")
 
+POSITIONAL_ARGS=()
+
+OPTS="-O3"
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --size)
+      OPTS="-Os"
+      shift
+      ;;
+    --pac)
+      OPTS="-O3 -march=armv8.3-a -mbranch-protection=standard"
+      shift
+      ;;
+    --out)
+      OUT=${2}
+      shift 2
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}"
+
+OUT="${OUT:=${1}_lifted}"
+
 CC="${CC:=cc}"
 
 TMP_DIR=/tmp/lifter
@@ -16,10 +49,10 @@ mkdir -p $TMP_DIR
 
 $LIFT_ROOT/bash/extract-sections.sh ${1}
 
-${CC} -o "${1}"_lifted "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} -O3 -Wl,-T /tmp/lifter/custom.ld
+${CC} -o ${OUT} "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} ${OPTS} -Wl,-T /tmp/lifter/custom.ld
 
 $LIFT_ROOT/bash/extract-sections.sh ${1} "${1}"_lifted --second-pass
 
-${CC} -o "${1}"_lifted "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} -O3 -Wl,-T /tmp/lifter/custom.ld
+${CC} -o ${OUT} "${1}"_concat.c trampolines.s "${LIFT_ROOT}/runtime/helper.S" ${LDPATHS} ${LDFLAGS} ${CFLAGS} ${WFLAGS} ${OPTS} -Wl,-T /tmp/lifter/custom.ld
 
 rm -r $TMP_DIR
