@@ -40,17 +40,30 @@ int initialize_python() {
 
     PyObject* main_module = PyImport_AddModule("__main__");
     global_dict = PyModule_GetDict(main_module);
+
+    fclose(file);
+
+    return 0;
 }
 
 int destroy_python() {
-    Py_DECREF(global_dict);
+    if(symbol_cache != NULL) {
+        free(symbol_cache->entries);
+        free(symbol_cache);
+    }
+
+    if(plt_cache != NULL) {
+        free(plt_cache->entries);
+        free(plt_cache);
+    }
+
     Py_Finalize();
+
+    return 0;
 }
 
 static int get_section(char* function, char* filename, int* section_addr, int* section_size, char** code) {
-    PyObject *expression;
-
-    expression = PyDict_GetItemString(global_dict, function);
+    PyObject* expression = PyDict_GetItemString(global_dict, function);
 
     PyObject* result = PyObject_CallFunction(expression, "s", filename);
 
@@ -65,8 +78,12 @@ static int get_section(char* function, char* filename, int* section_addr, int* s
     }
 
     *code = (char*)py_code.buf;
+    *code = malloc(py_code.len);
+    memcpy(*code, (char*)py_code.buf, py_code.len);
 
     PyBuffer_Release(&py_code);
+
+    Py_DECREF(result);
 
     return 0;
 } 
@@ -83,6 +100,7 @@ int get_init_array_section(char* filename, int* section_addr, int* section_size,
     return get_section("get_init_array_section", filename, section_addr, section_size, code);
 }
 
+// TODO: Decrement unused references.
 static int get_info_by_addr(char* function, char* filename, void* addr, char** symbol) {
     PyObject *expression;
 
@@ -149,6 +167,8 @@ static int cache_symbols_generic(char* filename, mambo_ht_t** cache, char* funct
     } else {
         PyErr_Print();
     }
+
+    Py_DECREF(result);
 
     return 0;
 }

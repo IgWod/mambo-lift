@@ -168,10 +168,14 @@ int main(int argc, char* argv[]) {
     memcpy(gcode + section_addr, code, section_size);
     memset(gcode, 0, section_addr);
 
+    free(code);
+
     int plt_section_addr, plt_section_size;
     get_plt_section(options.input_file, &plt_section_addr, &plt_section_size, &code);
 
     memcpy(gcode + plt_section_addr, code, plt_section_size);
+
+    free(code);
 
     mambo_ht_t* cfg = (mambo_ht_t *) malloc(sizeof(mambo_ht_t));
     if (cfg == NULL) {
@@ -416,6 +420,7 @@ int main(int argc, char* argv[]) {
     iterate_mambo_hashmap_end()
 
     free(gcode);
+    free(cfg->entries);
     free(cfg);
 
     return 0;
