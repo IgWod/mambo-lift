@@ -13,9 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-*/
-
-#include <stdio.h>
+*/ #include <stdio.h>
 
 #include <capstone/capstone.h>
 
@@ -798,7 +796,7 @@ skip:
                         decl
                 )
         );
-        goto_stmt->indirect_goto_stmt.jumps = malloc(256 * sizeof(void*));
+        goto_stmt->indirect_goto_stmt.jumps = malloc(512 * sizeof(void*));
 
         fret = node->stmts;
         append_to_stmt_list(&fret, goto_stmt);
