@@ -10,6 +10,7 @@ from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 
 R_AARCH64_GLOB_DAT = 1025
+R_AARCH64_ABS64 = 257
 
 def update_relocation_entries(filename, offset):
     with open(filename, "r+b") as fout:
@@ -21,7 +22,7 @@ def update_relocation_entries(filename, offset):
                 
                 for idx, rela in enumerate(entries):
                     # Only update relocations making use of symbols
-                    if rela["r_info_type"] == R_AARCH64_GLOB_DAT:
+                    if rela["r_info_type"] == R_AARCH64_GLOB_DAT or rela["r_info_type"] == R_AARCH64_ABS64:
                         new_r_sym = rela["r_info_sym"] + offset
                         new_r_info = (new_r_sym << 32) | (rela["r_info"] & 0xFFFFFFFF)
                         rela.entry["r_info"] = new_r_info
