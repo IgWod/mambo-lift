@@ -388,7 +388,7 @@ int main(int argc, char* argv[]) {
     convert_ast_to_code(lifted_code, translation_unit);
     fclose(lifted_code);
 
-    FILE *trampolines = fopen("trampolines.s", "w");
+    FILE *trampolines = fopen("trampolines.S", "w");
     generate_trampolines(trampolines, translation_unit);
     fclose(trampolines);
 
