@@ -287,6 +287,7 @@ int main(int argc, char* argv[]) {
     remove_unvisited_nodes(cfg);
     remove_fall_through_edges(cfg);
     promote_indirect_branches_to_calls(cfg, functions);
+    promote_indirect_branches_to_calls(cfg, functions);
     promote_inter_function_branches_to_calls(cfg, functions);
 
     functions_iter = functions;
