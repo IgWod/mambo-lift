@@ -21,7 +21,7 @@ while [[ $# -gt 0 ]]; do
       OPTS="-Os -fno-inline"
       shift
       ;;
-    --pac-no-ilnine)
+    --pac-no-inline)
       OPTS="-O3 -march=armv8.3-a -mbranch-protection=standard -fno-inline"
       shift
       ;;
