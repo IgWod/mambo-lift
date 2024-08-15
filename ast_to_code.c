@@ -604,7 +604,7 @@ static void dump_stmt(FILE *file, ast_stmt *stmt, mambo_ht_t *functions, uint32_
                         fprintf(file, "assert(0);\n");
                         break;
                 }
-                if(options.asserts && stmt->indirect_goto_stmt.number_jumps == 1) {
+                if(!options.asserts && stmt->indirect_goto_stmt.number_jumps == 1) {
                     if(stmt->indirect_goto_stmt.is_call) {
                         ast_function *function = NULL;
                         mambo_ht_get_nolock(functions, (uintptr_t) stmt->indirect_goto_stmt.jumps[0], (void *) (&function));
