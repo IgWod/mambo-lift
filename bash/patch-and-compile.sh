@@ -17,6 +17,18 @@ while [[ $# -gt 0 ]]; do
       OPTS="-O3 -march=armv8.3-a -mbranch-protection=standard"
       shift
       ;;
+    --size-no-inline)
+      OPTS="-Os -fno-inline"
+      shift
+      ;;
+    --pac-no-ilnine)
+      OPTS="-O3 -march=armv8.3-a -mbranch-protection=standard -fno-inline"
+      shift
+      ;;
+    --no-inline)
+      OPTS="-O3 -fno-inline"
+      shift
+      ;;
     --out)
       OUT=${2}
       shift 2
