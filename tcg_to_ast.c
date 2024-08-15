@@ -1778,7 +1778,6 @@ void translate_tcg_to_ast(TCGContext *ctx, ast_stmt_list *stmts, symbol_table *l
                 } else {
                     stmt = NULL;
                     fprintf(stderr, "Found helper %s %x\n", func_name, *(int32_t*)addr);
-                    exit(-1);
                 }
                 break;
 
